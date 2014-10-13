@@ -25,9 +25,11 @@ object StmtInterpreter {
 
   /** ⇓s: evaluating a statement, given a store **/
   def evalS(stmt: Stmt, σ: Store): Result = stmt match {
-    case Print(e)     ⇒ evalPrint(e, σ)
-    case Block(stmts) ⇒ evalBlock(stmts, σ)
+    case Print(e)         ⇒ evalPrint(e, σ)
+    case Block(stmts)     ⇒ evalBlock(stmts, σ)
     case If0(e, s_t, s_f) ⇒ evalIf0(e, s_t, s_f, σ)
+    case Set(x, e)        ⇒ evalAssign(x, e, σ)
+    case Update(x, e)     ⇒ evalUpdate(x, e, σ)
   }
 
   /** print **/
@@ -37,11 +39,29 @@ object StmtInterpreter {
 
     // (2) print the result
     println(v)
+    
+    σ // printing doesn't affect the store
   }
   
   /** blocks **/
   def evalBlock(stmts: Seq[Stmt], σ: Store): Result = 
-      stmts foreach ((s: Stmt) ⇒ evalS(s, σ))
+    if (stmts.isEmpty)
+      σ  // Empty blocks don't affect the environment or store
+    else {
+      // (1) evaluate 1st statement
+      val σ1 = evalS(stmts.head, σ)  
+
+      // (2) use result to evaluate rest of block
+      evalS(Block(stmts.tail), σ1)  
+    }
+  /**
+   * Note: we could also have written this code using a left-fold:
+   *       
+      def doNext(state: Store, stmt: Stmt): Result =  evalS(stmt, state)
+        
+      ( σ /: stmts )(doNext)
+   * 
+   */
   
   /** if0 **/
   def evalIf0(condition: Expr, trueBranch: Stmt, falseBranch: Stmt, σ: Store) = {
@@ -53,5 +73,35 @@ object StmtInterpreter {
       evalS(trueBranch, σ)
     else 
       evalS(falseBranch, σ)
+  }
+
+  def evalAssign(variable: Var, expr: Expr, σ: Store): Result = {
+    // error checking: make sure that var ∉ σ
+    require(!(σ contains variable), 
+            s"Redefinition of variable ${variable.name}")
+
+    // (1) evaluate the left-hand side 
+    val value = evalE(expr, σ)
+
+    // (2) Bind the variable to the value in the environment
+    val σ1 = σ + (variable → value)
+
+    σ1
+  }
+
+  /** variable update **/
+  def evalUpdate(variable: Var, expr: Expr, σ: Store): Result = {
+    // error checking: make sure that var ∈ σ
+    require(σ contains variable,
+      s"""Cannot update non-existent variable ${variable.name}. 
+    Try var ${variable.name} := ... ?""")
+
+    // (1) evaluate the left-hand side 
+    val value = evalE(expr, σ)
+
+    // (2) Bind the address to the new value in the store
+    val σ1 = σ + (variable → value)
+
+    σ1
   }
 }

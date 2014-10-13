@@ -10,7 +10,7 @@ package object semantics {
    * Domains
    */
   type Value = Int
-  type Result = Unit
+  type Result = Store
   
   type Store = LookupTable[Var, Value]
   

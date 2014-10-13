@@ -134,7 +134,7 @@ class GardenStmtSemanticsTests extends FunSpec
 
   override val interpreter = StmtInterpreter.eval _
 
-  override def lookup(x: Var, r: Result): Option[Value] = Some(0)
+  override def lookup(x: Var, r: Result): Option[Value] = r get x
 
   describe("Blocks") {
     it("combine two or more statements, separated by a semicolon") {

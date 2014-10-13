@@ -1,6 +1,6 @@
 name := "Growing Garden"
 
-version := "2.2"
+version := "3.0"
 
 scalaVersion := "2.11.2"
 
