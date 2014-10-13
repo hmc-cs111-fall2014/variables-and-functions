@@ -11,4 +11,11 @@ package object semantics {
    */
   type Value = Int
   type Result = Unit
+  
+  type Store = LookupTable[Var, Value]
+  
+  /**
+   * Initial values
+   */
+  val σ0: Store = LookupTable.empty[Var, Value] + (Var("LtUaE") → 42)
 }
