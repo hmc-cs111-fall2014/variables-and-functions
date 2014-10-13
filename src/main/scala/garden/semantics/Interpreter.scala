@@ -6,7 +6,7 @@ object ExprInterpreter {
   /** evaluating an expression with the initial store **/
   def eval(expr: Expr): Value = evalE(expr, σ0)
 
-  /** ⇓e: evaluating an expression **/
+  /** ⇓e: evaluating an expression, given a store **/
   def evalE(expr: Expr, σ: Store): Value = expr match {
     case Num(i)            ⇒ i
     case x: Var            ⇒ σ(x)
