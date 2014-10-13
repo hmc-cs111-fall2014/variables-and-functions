@@ -203,7 +203,7 @@ class GardenStmtSemanticsTests extends FunSpec
     }
 
     it("should have static scope") {
-      program("var result := 0; def addX(y) := {result := x + y}; addX(2); var x := 3; ") should
+      program("var result := 0; def addX(y) := {result := x + y}; addX(2); var x := 3 ") should
         raiseError[LookupException]
 
       program("var result := 0; def f(x) := {result := g(x+2)}; def g(y) := {result := x + y}; f(2)")
