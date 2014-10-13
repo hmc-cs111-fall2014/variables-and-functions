@@ -18,6 +18,27 @@ object ExprInterpreter {
 }
 
 object StmtInterpreter {
-    /** ⇓s: evaluating a statement **/ 
-  def eval(stmt: Stmt): Result = throw new NotImplementedError() 
+  import ExprInterpreter.evalE
+
+  /** evaluating a statement with the initial store **/
+  def eval(stmt: Stmt): Result = evalS(stmt, σ0)
+
+  /** ⇓s: evaluating a statement, given a store **/
+  def evalS(stmt: Stmt, σ: Store): Result = stmt match {
+    case Print(e)     ⇒ evalPrint(e, σ)
+    case Block(stmts) ⇒ evalBlock(stmts, σ)
+  }
+
+  /** print **/
+  def evalPrint(expr: Expr, σ: Store): Result = {
+    // (1) evaluate the expression
+    val v = evalE(expr, σ)
+
+    // (2) print the result
+    println(v)
+  }
+  
+  /** blocks **/
+  def evalBlock(stmts: Seq[Stmt], σ: Store): Result = 
+      stmts foreach ((s: Stmt) ⇒ evalS(s, σ))
 }
