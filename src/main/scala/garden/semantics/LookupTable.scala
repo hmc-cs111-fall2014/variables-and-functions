@@ -28,7 +28,7 @@ class LookupTable[K, +V] private (val scopes: List[Map[K, V]] = List())
     // there's probably a more elegant way to do this
 
     // split at first def
-    val (undefed, defed) = scopes span (_.contains(key))
+    val (defed, undefed) = scopes span (_.contains(key))
 
     // unbind the def, if we found it 
     val newDefed = defed match {
