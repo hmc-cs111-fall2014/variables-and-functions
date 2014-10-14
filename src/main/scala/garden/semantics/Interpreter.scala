@@ -178,6 +178,14 @@ object StmtInterpreter {
     // (6) evaluate the body with the new store
     val (ρ2, σ2) = evalS(body, ρC1, σ1)
 
+    /** WARNING: here's a naïve way to do garbage collection, but it doesn't 
+     *  work because closures can capture addresses that live longer than this 
+     *  function call:
+     *  
+         val σ3 = σ2 -- addrs
+     *  
+     */
+    
     // Function calls don't affect the *current* environment
     (ρ, σ2)
   }

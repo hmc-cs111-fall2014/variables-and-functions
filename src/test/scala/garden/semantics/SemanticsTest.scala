@@ -223,6 +223,17 @@ class GardenStmtSemanticsTests extends FunSpec
                  }; 
                  fact(5)""") should give (Var("result") → 120)
     }
+    
+    it("should technically allow higher-order functions") {
+        program("""var result :=0;
+                   var G := 0; 
+                   def f(x) := {
+                     def g(y) := {result := x+y}; 
+                     G:=g
+                   }; 
+                   f(2); 
+                   G(3)""") should give (Var("result") → 5)
+    }
 
   }
 }
