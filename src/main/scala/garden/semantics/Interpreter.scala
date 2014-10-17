@@ -2,11 +2,14 @@ package garden.semantics
 
 import garden.ir._
 
+/**
+ * ExprInterpreter can evaluate an Expr
+ */
 object ExprInterpreter {
   /** evaluating an expression with the initial environment and store **/
   def eval(expr: Expr): Value = evalE(expr, ρ0, σ0)
 
-  /** ⇓e: evaluating an expression, given a store **/
+  /** ⇓e: evaluating an expression, given an environment and store **/
   def evalE(expr: Expr, ρ: Environment, σ: Store): Value = expr match {
     case Num(i)            ⇒ i
     case x: Var            ⇒ σ(ρ(x))
@@ -17,20 +20,24 @@ object ExprInterpreter {
   }
 }
 
+/**
+ * StmtInterpreter can evaluate a Stmt
+ */
+
 object StmtInterpreter {
   import ExprInterpreter.evalE
   
   /** addresses and allocation **/
   private var nextAddress: Address = 0
   def alloc(): Address = {
-    nextAddress+=1; 
+    nextAddress += 1; 
     nextAddress
   }
 
   /** evaluating a statement with the initial environment and store **/
   def eval(stmt: Stmt): Result = evalS(stmt, ρ0, σ0)
 
-  /** ⇓s: evaluating a statement, given a store **/
+  /** ⇓s: evaluating a statement, given an environment and store **/
   def evalS(stmt: Stmt, ρ: Environment, σ: Store): Result = stmt match {
     case Print(e)         ⇒ evalPrint(e, ρ, σ)
     case Block(stmts)     ⇒ evalBlock(stmts, ρ, σ)
@@ -95,7 +102,7 @@ object StmtInterpreter {
     require(!(ρ contains variable), 
             s"Redefinition of variable ${variable.name}")
     
-    // (1) evaluate the left-hand side 
+    // (1) Evaluate the right-hand side 
     val value = evalE(expr, ρ, σ)
     
     // (2) Allocate space for the variable
@@ -117,7 +124,7 @@ object StmtInterpreter {
             s"""Cannot update non-existent variable ${variable.name}. 
     Try var ${variable.name} := ... ?""")
             
-    // (1) evaluate the left-hand side 
+    // (1) Evaluate the right-hand side 
     val value = evalE(expr, ρ, σ)
     
     // (2) Lookup the variable's address 
@@ -161,7 +168,7 @@ object StmtInterpreter {
     val argsLength = args.length
     val paramsLength = params.length
     require(args.length == params.length,
-      s"${f.name} expects $paramsLength arg(s) but got $argsLength")
+            s"${f.name} expects $paramsLength arg(s) but got $argsLength")
 
     // (2) evaluate the arguments
     val argValues = args map (evalE(_, ρ, σ))

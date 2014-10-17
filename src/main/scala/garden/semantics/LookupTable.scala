@@ -7,8 +7,19 @@ import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.Builder
 import scala.collection.mutable.MapBuilder
 
+/**
+ * Custom exception for when lookup fails
+ */
 class LookupException(msg: String) extends RuntimeException(msg)
 
+/**
+ * A lookup table that has the same interface as a map *and* provides support
+ * for a stack-based implementation of scopes (similar to Chapter 6 of 
+ * "Language Implementation Patterns") 
+ * 
+ * Design inspired by "The Architecture of Scala Collections"
+ * docs.scala-lang.org/overviews/core/architecture-of-scala-collections.html
+ */
 class LookupTable[K, +V] private (val scopes: List[Map[K, V]] = List())
     extends Map[K, V] with MapLike[K, V, LookupTable[K, V]] {
 
@@ -49,7 +60,7 @@ class LookupTable[K, +V] private (val scopes: List[Map[K, V]] = List())
         throw new LookupException(s"$key is undefined")
     }
 
-  // Additional functionality
+  // Additional functionality for a stack-based implementation of scopes
   def pushScope(): LookupTable[K, V] = new LookupTable(newScope :: scopes)
   def popScope():  LookupTable[K, V] = new LookupTable(scopes.tail)
   def isInScope(key: K) = scopes.head.contains(key)
