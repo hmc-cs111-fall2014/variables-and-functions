@@ -69,19 +69,11 @@ The repository has several tags, which correspond to different versions of
 Garden, as it grows from the expression language to its full syntax. The tags
 are
 
-[`Expressions`][Expressions]
-  : numbers and arithmetic operations
-[`Names`][Names]
-  : adds named constants
-[`Statements1`][Statements1]
-  : adds `print` and support for statement sequencing (blocks)
-[`Statements2`][Statements2]
-  : adds conditionals
-[`Variables`][Variables]
-  : adds variables, i.e., mutable state
-[`Functions1`][Functions1]
-  : adds function definitions and function calls, but the implementation doesn't provide scopes
-[`Functions2`][Functions2]
-  : adds support for scopes, but they're [dynamic][Dynamic Scopes]
-[`Functions3`][Functions3]
-  : adds support for [static (lexical) scopes][Static Scopes]
+  - [`Expressions`][Expressions] : numbers and arithmetic operations
+  - [`Names`][Names] : adds named constants
+  - [`Statements1`][Statements1] : adds `print` and support for statement sequencing (blocks)
+  - [`Statements2`][Statements2] : adds conditionals
+  - [`Variables`][Variables] : adds variables, i.e., mutable state
+  - [`Functions1`][Functions1] : adds function definitions and function calls, but the implementation doesn't provide scopes
+  - [`Functions2`][Functions2] : adds support for scopes, but they're [dynamic][Dynamic Scopes]
+  - [`Functions3`][Functions3] : adds support for [static (lexical) scopes][Static Scopes]
