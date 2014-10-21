@@ -15,6 +15,24 @@ import garden.ir.StmtBuilder
 import garden.ir.Var
 import garden.ir.If0
 
+/**
+ * The parser accepts the following language
+
+                n ∈ ℤ  x,f ∈ Name
+        
+        s ∈ Stmt ::= `print` e | s `;` s
+                  |  `if0` `(` e `)` `then` `{` s `}` `else` `{` s `}`
+                  |  `var` x `:=` e | x `:=` e
+                  |  `def` f `(` x `)` `:=` `{` s `}` | f `(` e `)`
+        
+        e ∈ Expr ::= n | x | e op e | `(` e `)`
+        
+        op ∈ Operator ::= `+` | `-` | `*` | `/`
+
+ * The parser ignores whitespace. 
+ * ℤ is parsed using JavaTokenParsers' wholeNumber parser.
+ * Name is parsed using JavaTokenParsers' ident parser.
+ */
 object GardenParser extends JavaTokenParsers with PackratParsers {
 
     // parsing interface
