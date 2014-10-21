@@ -38,7 +38,7 @@ op ∈ Operator ::= + | - | * | /
 
 ## Semantics and Prolog Implementation
 
-The language includes a formal semantics, specified in as comments in a 
+The language includes a formal semantics, specified as comments in a 
 [Prolog file][Prolog]. The file also includes a Prolog implementation of the
 semantics.
 
