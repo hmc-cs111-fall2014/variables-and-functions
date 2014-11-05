@@ -41,7 +41,7 @@ alloc([[_, Addr]|_], N) :- N is Addr+1, !.
 
 
 %% ------------------ [Var]
-%%  <x, ρ, σ> ⇓ σ[x]
+%%  <x, ρ, σ> ⇓ σ[ρ[x]]
 
 (Var, Env, Store) ⇓ Value :- 
   lookupValue(Var, Env, Store, Value), 
