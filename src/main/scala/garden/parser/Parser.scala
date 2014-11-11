@@ -89,8 +89,4 @@ object GardenParser extends JavaTokenParsers with PackratParsers {
         
     // numbers
     def number: Parser[Num] = wholeNumber ^^ {s ⇒ Num(s.toInt)}
-    
-    def testS: Parser[String] = 
-      test~test~test~test ^^ {case n~e~w~s ⇒ n+e+w+s} 
-    def test: Parser[String] = "*"
  }
